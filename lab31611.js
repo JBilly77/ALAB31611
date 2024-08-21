@@ -17,17 +17,17 @@ var menuLinks = [
 */
 
 // Select and cache the <main> element in a variable named mainEl
-const mainEl = document.querySelector('main');
+const mainEl = document.querySelector("main");
 
 // Set the background color of mainEl to the value stored in the --main-bg CSS custom property
 mainEl.style.backgroundColor = "var(--main-bg)";
 console.log("mainEl");
 
 // Set the content of mainEl to <h1>DOM Manipulation</h1>
-mainEl.innerHTML = '<h1>DOM Manipulation</h1>';
+mainEl.innerHTML = "<h1>DOM Manipulation</h1>";
 
 // Add a class of flex-ctr to mainEl
-mainEl.classList.add('flex-ctr');
+mainEl.classList.add("flex-ctr");
 
 /*
 #############################################################
@@ -38,16 +38,16 @@ mainEl.classList.add('flex-ctr');
 */
 
 // Select and cache the <nav id="top-menu"> element in a variable named topMenuEl
-const topMenuEl = document.getElementById('top-menu');
+const topMenuEl = document.getElementById("top-menu");
 
 // Set the height of the topMenuEl element to be 100%
-topMenuEl.style.height = '100%';
+topMenuEl.style.height = "100%";
 
 // Set the background color of topMenuEl to the value stored in the --top-menu-bg CSS custom property
-topMenuEl.style.backgroundColor = 'var(--top-menu-bg)';
+topMenuEl.style.backgroundColor = "var(--top-menu-bg)";
 
 // Add a class of flex-around to topMenuEl
-topMenuEl.classList.add('flex-around');
+topMenuEl.classList.add("flex-around");
 
 /*
 #############################################################
@@ -73,16 +73,15 @@ topMenuEl.classList.add('flex-around');
  });
  */
 
-                          //##############//
- //=======================  LAB PART TWO   =====================//
-                         //##############// 
-                         
+//##############//
+//=======================  LAB PART TWO   =====================//
+//##############//
 
 //============Part 1 - Modifying the Structure=============
 
 //Updated Menu data structure
 var menuLinks = [
-  { text: "about", href: "/about.html" },
+  { text: "about", href: "/about" },
   {
     text: "catalog",
     href: "#",
@@ -117,7 +116,6 @@ menuLinks.forEach((link) => {
   a.textContent = link.text;
   topMenuEl.appendChild(a);
 });
-
 
 //========Part 3 - Adding interactivity===========
 const subMenuEl = document.getElementById("sub-menu");
@@ -155,6 +153,10 @@ topMenuEl.addEventListener("click", function (e) {
   if (e.target.classList.contains("active") && clickedLink.subLinks) {
     subMenuEl.style.top = "100%";
     buildSubMenu(clickedLink.subLinks);
+  } else if (e.target.textContent === "about") {
+    subMenuEl.style.top = 0;
+    // Update the contents of mainEl, within an <h1>, to the contents of the <a> element clicked within subMenuEl
+    mainEl.innerHTML = "<h1>" + "about" + "</h1>";
   } else {
     if (!clickedLink.subLinks) {
       subMenuEl.style.top = 0;
@@ -177,4 +179,27 @@ topMenuEl.addEventListener("click", function (e) {
   }
 });
 
+// Attach a delegated 'click' event listener to subMenuEl
+subMenuEl.addEventListener("click", function (e) {
+  // Call the event object's preventDefault() method
+  e.preventDefault();
 
+  // Immediately return if the element clicked was not an <a> element
+  if (!e.target.matches("a")) {
+    return;
+  }
+
+  // Log the content of the <a> to verify the handler is working
+  console.log(e.target.textContent);
+
+  // Set the CSS top property of subMenuEl to 0
+  subMenuEl.style.top = "0";
+
+  // Remove the active class from each <a> element in topMenuLinks
+  topMenuLinks.forEach((link) => {
+    link.classList.remove("active");
+  });
+
+  // Update the contents of mainEl, within an <h1>, to the contents of the <a> element clicked within subMenuEl
+  mainEl.innerHTML = "<h1>" + e.target.textContent + "</h1>";
+});
